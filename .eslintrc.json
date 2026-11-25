@@ -1,10 +1,33 @@
 {
   "root": true,
-  "env": {
-    "browser": true,
-    "es2022": true,
-    "node": true
-  },
+  "overrides": [
+    {
+      "files": [
+        "apps/client_app/**/*.js",
+        "apps/client_app/**/*.jsx",
+        "apps/client_app/**/*.ts",
+        "apps/client_app/**/*.tsx"
+      ],
+      "env": {
+        "browser": true,
+        "node": false
+      }
+    },
+    {
+      "files": [
+        "apps/auth_microservice/**/*.js",
+        "apps/auth_microservice/**/*.ts",
+        "apps/core_microservice/**/*.js",
+        "apps/core_microservice/**/*.ts",
+        "apps/notifications_consumer_microservice/**/*.js",
+        "apps/notifications_consumer_microservice/**/*.ts"
+      ],
+      "env": {
+        "node": true,
+        "browser": false
+      }
+    }
+  ],
   "extends": [
     "eslint:recommended",
     "@typescript-eslint/recommended",

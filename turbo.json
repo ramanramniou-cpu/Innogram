@@ -1,15 +1,16 @@
 {
-  "pipeline": {
+  "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", "build/**"]
+      "outputs": [".next/**", "dist/**", "build/**"]
     },
     "dev": {
       "cache": false,
       "persistent": true
     },
     "test": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"]
     },
     "lint": {},
     "type-check": {
