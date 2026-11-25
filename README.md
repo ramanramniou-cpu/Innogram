@@ -21,8 +21,9 @@ innogram/
 
 ## Prerequisites
 
-- Node.js (v18 or higher)
+- Node.js (v20 or higher)
 - PostgreSQL (v13 or higher)
+- RabbitMQ (v3 or higher)
 - Redis (v6 or higher)
 - Docker (optional)
 
@@ -34,17 +35,17 @@ innogram/
    npm install
    ```
 
-2. **Start infrastructure services:**
-
-   ```bash
-   npm run docker:up
-   ```
-
-3. **Set up environment variables:**
+2. **Set up environment variables:**
 
    ```bash
    cp .env.example .env
    # Edit .env with your configuration
+   ```
+
+3. **Start infrastructure services:**
+
+   ```bash
+   npm run docker:up
    ```
 
 4. **Run database migrations:**
@@ -53,7 +54,13 @@ innogram/
    npm run db:migrate
    ```
 
-5. **Start development servers:**
+5. **Seed the database:**
+
+   ```bash
+   npm run db:seed
+   ```
+
+6. **Start development servers:**
    ```bash
    npm run dev
    ```
