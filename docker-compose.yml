@@ -1,46 +1,65 @@
-version: '3.8'
+version: "3.8"
 
 services:
   postgres:
     image: postgres:15
-    container_name: innogram-postgres
+    container_name: inno-postgres
     environment:
-      POSTGRES_DB: innogram
-      POSTGRES_USER: innogram_user
-      POSTGRES_PASSWORD: innogram_password
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - innogram-network
+      - inno-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   redis:
     image: redis:7-alpine
-    container_name: innogram-redis
+    container_name: inno-redis
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
     networks:
-      - innogram-network
+      - inno-network
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a $${REDIS_PASSWORD} ping | grep -q PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
 
   rabbitmq:
     image: rabbitmq:3-management
-    container_name: innogram-rabbitmq
+    container_name: inno-rabbitmq
     environment:
-      RABBITMQ_DEFAULT_USER: innogram
-      RABBITMQ_DEFAULT_PASS: innogram_password
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
     ports:
       - "5672:5672"
       - "15672:15672"
     networks:
-      - innogram-network
+      - inno-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "check_running"]
+      interval: 15s
+      timeout: 15s
+      retries: 3
+      start_period: 15s
 
 volumes:
   postgres_data:
   redis_data:
 
 networks:
-  innogram-network:
+  inno-network:
     driver: bridge
